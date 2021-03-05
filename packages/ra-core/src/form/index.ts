@@ -7,6 +7,7 @@ import FormField from './FormField';
 import FormWithRedirect, {
     FormWithRedirectProps,
     FormWithRedirectRender,
+    FormWithRedirectRenderProps,
     FormWithRedirectSave,
     HandleSubmitWithRedirect,
 } from './FormWithRedirect';
@@ -30,6 +31,7 @@ export type {
     FormDataConsumerRender,
     FormDataConsumerRenderParams,
     FormWithRedirectProps,
+    FormWithRedirectRenderProps,
     FormWithRedirectRender,
     FormWithRedirectSave,
     HandleSubmitWithRedirect,

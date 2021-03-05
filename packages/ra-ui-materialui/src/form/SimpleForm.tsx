@@ -10,12 +10,11 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import {
     FormWithRedirect,
+    FormWithRedirectRenderProps,
     FormWithRedirectProps,
     MutationMode,
     Record,
-    RedirectionSideEffect,
 } from 'ra-core';
-import { FormRenderProps } from 'react-final-form';
 
 import FormInput from './FormInput';
 import Toolbar from './Toolbar';
@@ -105,7 +104,7 @@ export interface SimpleFormProps
     variant?: 'standard' | 'outlined' | 'filled';
 }
 
-const SimpleFormView: FC<SimpleFormViewProps> = ({
+const SimpleFormView = ({
     basePath,
     children,
     className,
@@ -125,7 +124,7 @@ const SimpleFormView: FC<SimpleFormViewProps> = ({
     undoable,
     variant,
     ...rest
-}) => (
+}: SimpleFormViewProps) => (
     <form
         className={classnames('simple-form', className)}
         {...sanitizeRestProps(rest)}
@@ -188,18 +187,15 @@ SimpleFormView.propTypes = {
     validate: PropTypes.func,
 };
 
-export interface SimpleFormViewProps extends FormRenderProps {
+export interface SimpleFormViewProps extends FormWithRedirectRenderProps {
     basePath?: string;
+    children?: ReactNode;
     className?: string;
     component?: React.ComponentType<any>;
-    handleSubmitWithRedirect?: (redirectTo: RedirectionSideEffect) => void;
     margin?: 'none' | 'normal' | 'dense';
     mutationMode?: MutationMode;
     record?: Record;
-    redirect?: RedirectionSideEffect;
     resource?: string;
-    save?: () => void;
-    saving?: boolean;
     toolbar?: ReactElement;
     /** @deprecated use mutationMode: undoable instead */
     undoable?: boolean;
