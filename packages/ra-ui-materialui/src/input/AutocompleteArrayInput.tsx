@@ -18,7 +18,9 @@ import {
     ChoicesInputProps,
     useSuggestions,
     warning,
+    useWhyDidYouUpdate,
 } from 'ra-core';
+import debounce from 'lodash/debounce';
 
 import InputHelperText from './InputHelperText';
 import AutocompleteSuggestionList from './AutocompleteSuggestionList';
@@ -101,6 +103,7 @@ const AutocompleteArrayInput: FunctionComponent<
         allowEmpty,
         classes: classesOverride,
         choices = [],
+        debounce: debounceDelay = 250,
         disabled,
         emptyText,
         emptyValue,
@@ -212,6 +215,11 @@ const AutocompleteArrayInput: FunctionComponent<
         translateChoice,
     });
 
+    // eslint-disable-next-line
+    const debouncedSetFilter = useCallback(debounce(setFilter || DefaultSetFilter, debounceDelay),
+        [setFilter, debounceDelay]
+    );
+
     const handleFilterChange = useCallback(
         (eventOrValue: React.ChangeEvent<{ value: string }> | string) => {
             const event = eventOrValue as React.ChangeEvent<{ value: string }>;
@@ -221,10 +229,10 @@ const AutocompleteArrayInput: FunctionComponent<
 
             setFilterValue(value);
             if (setFilter) {
-                setFilter(value);
+                debouncedSetFilter(value);
             }
         },
-        [setFilter, setFilterValue]
+        [debouncedSetFilter, setFilter, setFilterValue]
     );
 
     // We must reset the filter every time the value changes to ensure we
@@ -542,5 +550,16 @@ const useStyles = makeStyles(
     },
     { name: 'RaAutocompleteArrayInput' }
 );
+
+const DefaultSetFilter = () => {};
+
+interface Options {
+    suggestionsContainerProps?: any;
+    labelProps?: any;
+}
+
+export interface AutocompleteArrayInputProps
+    extends ChoicesInputProps<TextFieldProps & Options>,
+        Omit<DownshiftProps<any>, 'onChange'> {}
 
 export default AutocompleteArrayInput;
